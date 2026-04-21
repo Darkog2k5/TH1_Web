@@ -1,11 +1,19 @@
 import { useState } from "react";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "./assets/vite.svg";
-// import heroImg from "./assets/hero.png";
+import { Routes, Route, Link } from "react-router-dom";
+import Product from "./component/Product/Product.jsx";
+import MenuIcon from "./component/Menu_icon/MenuIcon.jsx";
+import AboutUs from "./component/AboutUs/AboutUs.jsx";
+import Cart from "./component/Cart/Cart.jsx";
+import CategoryPage from "./component/CategoryPage/CategoryPage.jsx";
 import "./App.css";
+
+import { DUMMY_PRODUCTS } from "./data/products.js";
+import { useCart } from "./hooks/useCart.js";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const { cart, handleAddToCart, removeFromCart, clearCart } = useCart();
+
   return (
     <>
       {/* HEADER */}
@@ -13,9 +21,11 @@ function App() {
         <h1 className="logo">PC Shop</h1>
         <h2 className="hotline">Hotline: 123-456-7890</h2>
         <nav className="nav-header">
-          <a href="#">Products</a>
-          <a href="#">Cart</a>
-          <a href="#">Home</a>
+          <Link to="/about-us">About Us</Link>
+          <Link to="/cart">
+            Cart ({cart.reduce((total, item) => total + item.quantity, 0)})
+          </Link>
+          <Link to="/">Home</Link>
         </nav>
       </header>
 
@@ -24,99 +34,81 @@ function App() {
           className="svg-category"
           onClick={() => setShowSidebar(!showSidebar)}
         >
-          <svg
-            className=""
-            width="18"
-            height="14"
-            viewBox="0 0 18 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              x="-0.00012207"
-              y="0.000190735"
-              width="18"
-              height="2"
-              rx="1"
-              fill="white"
-            ></rect>
-            <rect
-              x="-0.00012207"
-              y="5.99999"
-              width="18"
-              height="2"
-              rx="1"
-              fill="white"
-            ></rect>
-            <rect
-              x="-0.00012207"
-              y="12.0001"
-              width="18"
-              height="2"
-              rx="1"
-              fill="white"
-            ></rect>
-          </svg>
+          <MenuIcon />
           <span>Category</span>
         </div>
 
         {/* SIDEBAR */}
         <div className={`sidebar ${showSidebar ? "active" : ""}`}>
-          <a href="#">Laptop</a>
-          <a href="#">Laptop Gaming</a>
-          <a href="#">PC GVN</a>
-          <a href="#">Main, CPU, VGA</a>
-          <a href="#">Case, Nguồn, Tản</a>
-          <a href="#">Ổ cứng, RAM</a>
-          <a href="#">Tai nghe</a>
-          <a href="#">Bàn phím</a>
-          <a href="#">Chuột</a>
-          <a href="#">Products</a>
+          <Link to="/category/laptop">Laptop</Link>
+          <Link to="/category/laptop-gaming">Laptop Gaming</Link>
+          <Link to="/category/pc">PC</Link>
+          <Link to="/category/main-cpu-vga">Main, CPU, VGA</Link>
+          <Link to="/category/case-nguon-tan">Case, Nguồn, Tản</Link>
+          <Link to="/category/oCung-ram">Ổ cứng, RAM</Link>
+          <Link to="/category/taiNghe">Tai nghe</Link>
+          <Link to="/category/banPhim">Bàn phím</Link>
+          <Link to="/category/chuot">Chuột</Link>
+
+          <Link to="/" onClick={() => setShowSidebar(false)}>
+            Tất cả Products
+          </Link>
         </div>
 
         <div className="content">
-          {/* first-section */}
-          <section className="first-section">
-            <img
-              class="pc-sec1-img"
-              src="https://cdn.hstatic.net/products/200000722513/web__61_of_86__aea66174cf754130b266656c48778519_grande.jpg"
-            ></img>
-            <h2>Welcome to our store</h2>
-            <p>Best products with best prices</p>
-          </section>
+          <Routes>
+            {/* Route cho trang chủ (Đường dẫn "/") */}
+            <Route
+              path="/"
+              element={
+                <>
+                  {/* first-section */}
+                  <section className="first-section">
+                    <img
+                      class="pc-sec1-img"
+                      src="https://cdn.hstatic.net/products/200000722513/web__61_of_86__aea66174cf754130b266656c48778519_grande.jpg"
+                    ></img>
+                    <h2>Welcome to our store</h2>
+                    <p>Best products with best prices</p>
+                  </section>
 
-          {/* PRODUCT LIST */}
-          <section className="products">
-            <div className="product">
-              <img
-                className="product1"
-                src="https://cdn.hstatic.net/products/200000722513/pc_rtx_5060__2_of_84__c7867c9dc9d94d72a6c18c61e398cee3_grande.jpg"
-              ></img>
-              <h3>PC GVN Intel Core Ultra 7 265F/ VGA RTX 5080</h3>
-              <p>76.590.000₫</p>
-              <button>Add to cart</button>
-            </div>
+                  {/* PRODUCT LIST */}
+                  <section className="products">
+                    {DUMMY_PRODUCTS.map((prod) => (
+                      <Product
+                        key={prod.id}
+                        id={prod.id}
+                        src={prod.src}
+                        title={prod.title}
+                        price={prod.price}
+                        onAddToCart={handleAddToCart}
+                      />
+                    ))}
+                  </section>
+                </>
+              }
+            />
 
-            <div className="product">
-              <img
-                className="product2"
-                src="https://cdn.hstatic.net/products/200000722513/web__61_of_86__aea66174cf754130b266656c48778519_grande.jpg"
-              ></img>
-              <h3>PC GVN Intel i7-14700F/ VGA RTX 5080</h3>
-              <p>81.490.000₫</p>
-              <button>Add to cart</button>
-            </div>
+            {/* Route cho trang About Us (Đường dẫn "/about-us") */}
+            <Route path="/about-us" element={<AboutUs />} />
 
-            <div className="product">
-              <img
-                className="product3"
-                src="https://product.hstatic.net/200000722513/product/pc_gvn__i7-_4070_-_3_0ea0d3f21b41464991ac7134a04ac5e4_grande.png"
-              ></img>
-              <h3>PC GVN AMD R7-9800x3D/ VGA RTX 5080 (Powered by MSI)</h3>
-              <p>88.880.000₫</p>
-              <button>Add to cart</button>
-            </div>
-          </section>
+            {/* Route cho trang Cart (Đường dẫn "/cart") */}
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cartItems={cart}
+                  removeFromCart={removeFromCart}
+                  clearCart={clearCart}
+                />
+              }
+            />
+
+            <Route
+              path="/category/:categorySlug"
+              element={<CategoryPage onAddToCart={handleAddToCart} />}
+            />
+          </Routes>
         </div>
       </div>
 
