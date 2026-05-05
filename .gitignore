@@ -1,4 +1,26 @@
-# Logs
+# =========================================
+# 1. DEPENDENCIES (Thư viện)
+# =========================================
+node_modules/
+
+# =========================================
+# 2. ENVIRONMENT VARIABLES (Biến môi trường)
+# ĐẢM BẢO BẢO MẬT TUYỆT ĐỐI CHO DATABASE
+# =========================================
+.env
+.env.*
+!.env.example
+
+# =========================================
+# 3. BUILD OUTPUTS (Thư mục sau khi build)
+# =========================================
+dist/
+dist-ssr/
+build/
+
+# =========================================
+# 4. LOGS (Các file ghi lỗi hệ thống)
+# =========================================
 logs
 *.log
 npm-debug.log*
@@ -7,16 +29,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# =========================================
+# 5. OS & EDITOR FILES (File hệ thống & Trình biên dịch)
+# =========================================
+.DS_Store
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
